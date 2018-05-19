@@ -180,6 +180,7 @@ function createCollectable(x, y) {
 // function calls executeLoss(). If a monster falls off the screen, it is
 // removed from the game.
 function applyGravity() {
+  player.velocity.y +=  GRAVITY;
 
 }
 
@@ -187,12 +188,17 @@ function applyGravity() {
 // between all relevant game objects. Depending on the collision or overlap that
 // occurs, a specific callback function is run.
 function checkCollisions() {
+  player.collide(platforms, platformCollision);
 
 }
 
 // Callback function that runs when the player or a monster collides with a
 // platform.
 function platformCollision(sprite, platform) {
+  if(sprite === player && sprite.touching.bottom) {
+    sprite.velocity.y = 0;
+    playerGrounded = true;
+  }
 
 }
 
@@ -210,6 +216,10 @@ function getCollectable(player, collectable) {
 // all of the relevant "check" functions below.
 function updatePlayer() {
   //console.log("Player x: " + player.position.x + " Player y: " + player.position.y);
+  checkIdle();
+  checkFalling();
+  checkJumping();
+  checkMovingLeftRight();
 
 }
 
@@ -238,7 +248,19 @@ function checkJumping() {
 // left or right according to DEFAULT_VELOCITY. Also be sure to mirror the
 // player's sprite left or right to avoid "moonwalking".
 function checkMovingLeftRight() {
+  if(keyIsDown(LEFT_ARROW) && !keyIsDown(RIGHT_ARROW)) {
+      player.mirrorX(-1);
+      if(playerGrounded) {
+        player.changeAnimation("run");
+      }
+      player.velocity.x = -DEFAULT_VELOCITY;
 
+
+  }
+else if(keyIsDown(RIGHT_ARROW) && !keyIsDown(LEFT_ARROW)) {
+      player.mirrorX(1);
+      player.velocity.x = DEFAULT_VELOCITY;
+  }
 }
 
 // Check if the player has pressed the up arrow key. If the player is grounded
