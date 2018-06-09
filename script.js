@@ -26,7 +26,7 @@ var goalImage;
 // Physics Variables
 const GRAVITY = 0.5;
 const DEFAULT_VELOCITY = 5;
-const DEFAULT_JUMP_FORCE = -5;
+const DEFAULT_JUMP_FORCE = -10;
 var currentJumpForce;
 
 // Timing and Control Variables
