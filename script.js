@@ -106,6 +106,28 @@ function buildLevel() {
   platforms = new Group();
   monsters = new Group();
   collectables = new Group();
+  // create platforms, monsters, and any other game objects
+// best method is to draw sprites from left to right on the screen
+createPlatform(50, 690, 5);
+createCollectable(300, 340);
+createMonster(500, 600, -2);
+createCollectable(700, 440);
+
+createPlatform(850, 645, 3);
+createMonster(1085, 530, 0);
+createCollectable(1085, 320);
+createCollectable(1300, 420);
+
+createPlatform(1450, 595, 4);
+createCollectable(1600, 320);
+createMonster(1730, 470, 0);
+createCollectable(1730, 240);
+createMonster(1860, 470, 0);
+
+createPlatform(2050, 470, 2);
+goal = createSprite(2115, 360);
+goal.addImage(goalImage);
+
 
   // create platforms, monsters, and any other game objects
   // best method is to draw sprites from left to right on the screen
@@ -203,6 +225,7 @@ function checkCollisions() {
     monsters.collide(platforms, platformCollision);
     player.collide(monsters,playerMonsterCollision);
     player.overlap(collectables, getCollectable);
+    player.overlap(goal, executeWin);
 }
 
 // Callback function that runs when the player or a monster collides with a
@@ -245,14 +268,13 @@ function playerMonsterCollision(player, monster) {
 
 // Callback function that runs when the player overlaps with a collectable.
 function getCollectable(player, collectable) {
-  kunai.remove();
-
+collectable.remove();
 }
 
 // Updates the player's position and current animation by calling
 // all of the relevant "check" functions below.
 function updatePlayer() {
-  //console.log("Player x: " + player.position.x + " Player y: " + player.position.y);
+  console.log("Player x: " + player.position.x + " Player y: " + player.position.y);
   checkIdle();
   checkFalling();
   checkJumping();
@@ -362,14 +384,21 @@ function updateDisplay() {
 
   // turn camera back on
   camera.on();
+
   camera.position.x = player.position.x;
 
+  for(i = 0; i < collectables.length; i++){
+    collectables[i].rotation +=5;
+  }
 }
 
 // Called when the player has won the game (e.g., reached the goal at the end).
 // Anything can happen here, but the most important thing is that we call resetGame()
 // after a short delay.
 function executeWin() {
+  noLoop();
+  setTimeout(resetGame, 1000);
+
 
 }
 
